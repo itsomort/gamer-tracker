@@ -8,7 +8,6 @@ import express from 'express';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
-
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
@@ -61,6 +60,14 @@ if (isMainModule(import.meta.url)) {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
+
+app.use(express.json());
+// curl -X POST -d '{"hello": "hi"}' -H "Content-Type:application/json" --url http://localhost:4200/what
+app.post('/what', async (req, res) => {
+    console.log(process.env.ATLAS_URI)
+    res.json({requestBody: req.body})
+    //res.send("Whatever\n").status(200);
+});
 
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
