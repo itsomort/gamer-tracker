@@ -29,8 +29,13 @@
     "@angular/platform-server": "^20.0.0",
     "@angular/router": "^20.0.0",
     "@angular/ssr": "^20.0.4",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
     "express": "^5.1.0",
+    "mongodb": "^6.17.0",
+    "mongoose": "^8.16.1",
     "rxjs": "~7.8.0",
+    "source-map-support": "^0.5.21",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
