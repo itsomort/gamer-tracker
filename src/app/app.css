@@ -35,7 +35,10 @@ main{
 }
 #signup:hover{
   background-color: #EBB3AA;
-
+  cursor:pointer;
+}
+#signup:active{
+  background-color: #CB938A;
 }
 
 #image{
