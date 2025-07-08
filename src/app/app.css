@@ -63,7 +63,6 @@ main{
   margin:10px;
   border-radius: 40px;
   background-color: #F0DBDB;
-  
 }
 
 #floating_box > #title {
@@ -74,5 +73,4 @@ main{
   justify-content: center;
   margin:10%;
   align-items: center;
-  text-align: center;
 }
