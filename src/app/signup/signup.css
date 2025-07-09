@@ -15,7 +15,7 @@ body{
   border-radius: 25px;
   background-color: #DBA39A;
   border: 2px solid black;
-  filter: drop-shadow(4px 4px 2px gray);
+  filter: drop-shadow(4px 4px 4px gray);
   font-size:1.2em;
 }
 #home:hover{
@@ -38,6 +38,7 @@ body{
    margin-right: 0px;
    border-radius: 40px;
    background-color: #F0DBDB;
+   overflow:hidden;
  }
 
  #main_data{
@@ -103,4 +104,25 @@ body{
  }
  #signup:active{
       background-color: #CB938A;
+ }
+ #name{
+   z-index: 2;
+   font-size:4em;
+   font-style:oblique;
+   font-weight:lighter;
+   margin: auto;
+   position:relative;
+   top:50px;
+   text-align: center;
+   align-items: center;
+   justify-content: center;
+ }
+ #overlay{
+   width:100%;
+   height:100%;
+   margin:0;
+   padding:0;
+   position:absolute;
+   border-radius: 40px;
+   background-color: rgba(240,219,219,0.5);
  }
