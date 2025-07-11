@@ -8,11 +8,17 @@ const router = Router();
 /**
 POST /api/journal 
 req: {"userid": "hashed_code", "journal_entry": "journal entry here"}
-res: {"status": "yes, no, whatever", "sentiment": number_here}
+res: {"status": 0 or 1, "sentiment": number_here}
+"status": 0 = success, "status": 1 = error
+HTTP 200 = success
+HTTP 500 = error
 
 GET /api/journal
 req: {"userid": "hashed_code"}
-res: {"entries": ["entry1", "entry2"], "status": "yes, no, whatever"}
+res: {"status": 0 or 1, "entries": ["entry1", "entry2"]}
+"status": 0 = success, "status": 1 = error
+HTTP 200 = success
+HTTP 500 = error
  * 
  */
 
@@ -48,10 +54,22 @@ router.post('/', async(req, res) => {
     let result = await collection.findOne(query);
 
     if(result === null) {
-        console.log("User not present");
+        console.log(`User ${userid} not found`);
+        // insert new document with userid and journal entry
+        await collection.insertOne({
+            "_id": userid,
+            "entries": [journal_entry]
+        });
+        res.send({"status": 0, "sentiment": 1});
     }
     else {
-        console.log("User found");
+        console.log(`User ${userid} found`);
+        // update document with new journal entry
+        await collection.updateOne(
+            {_id: userid},
+            {$push: {entries: journal_entry}}
+        );
+        res.send({"status": 0, "sentiment": 1})
     }
 });
 
