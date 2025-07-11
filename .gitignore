@@ -37,6 +37,8 @@ yarn-error.log
 testem.log
 /typings
 .env
+test.js
+src/server/routes/request.http
 
 # System files
 .DS_Store

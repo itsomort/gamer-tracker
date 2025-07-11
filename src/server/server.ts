@@ -6,6 +6,9 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { configDotenv } from 'dotenv';
+import journal from './routes/journal';
+configDotenv();
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
@@ -61,13 +64,7 @@ if (isMainModule(import.meta.url)) {
   });
 }
 
-app.use(express.json());
-// curl -X POST -d '{"hello": "hi"}' -H "Content-Type:application/json" --url http://localhost:4200/what
-app.post('/what', async (req, res) => {
-    console.log(process.env.ATLAS_URI)
-    res.json({requestBody: req.body})
-    //res.send("Whatever\n").status(200);
-});
+app.use('/api/journal', journal);
 
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
