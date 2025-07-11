@@ -1,0 +1,128 @@
+body{
+   font-family:"JetBrains Mono", Arial, Helvetica, sans-serif;
+   font-optical-sizing: auto;
+   font-weight: <weight>;
+   overflow-x: hidden;
+   background-color: #FEFCF3;
+}
+#home{
+  position:relative;
+  float:left;
+  margin-left:15px;
+  top:30px;
+  width:80px;
+  height:50px;
+  border-radius: 25px;
+  background-color: #DBA39A;
+  border: 2px solid black;
+  filter: drop-shadow(4px 4px 4px gray);
+  font-size:1.2em;
+}
+#home:hover{
+  background-color: #EBB3AA;
+  cursor:pointer;
+}
+#home:active{
+  background-color: #CB938A;
+}
+ #header{
+   height:50px;
+ }
+ #image{
+   position:relative;
+   float:left;
+   width: 65%;
+   height: 700px;
+   right:50px;
+   margin: 10px;
+   margin-right: 0px;
+   border-radius: 40px;
+   background-color: #F0DBDB;
+   overflow:hidden;
+ }
+
+ #main_data{
+   margin-top:80px;
+ }
+ #floating_box{
+   position:absolute;
+   right:0%;
+   top:140px;
+   width: 35%;
+   margin:10px;
+   border-radius: 40px;
+ }
+
+ #floating_box > #title {
+   font-size: 2em;
+   font-style:oblique;
+   font-weight:lighter;
+   border-bottom: 2px solid #DBA39A;
+   justify-content: center;
+   margin:10%;
+   margin-right:15%;
+   margin-bottom:0;
+   align-items: center;
+ }
+
+ #floating_box > form > #form{
+  background-color: #DBA39A;
+  border: 2px solid black;
+  height: 50px;
+  margin: 10px;
+  width: 70%;
+  position: relative;
+  left:50px;
+  font-size:2em;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+
+ }
+ #signup{
+  position:relative;
+  display:flex;
+  top:30px;
+  width:190px;
+  margin:auto;
+  height:50px;
+  border-radius: 25px;
+  background-color: #DBA39A;
+  border: 2px solid black;
+  filter: drop-shadow(4px 4px 4px gray);
+  text-align: center;
+  align-items: center;
+  font-size:1.3em;
+  justify-content: center;
+  right:5px;
+}
+
+#signup:hover{
+      background-color: #EBB3AA;
+         cursor:pointer;
+
+ }
+ #signup:active{
+      background-color: #CB938A;
+ }
+ #name{
+   z-index: 2;
+   font-size:4em;
+   font-style:oblique;
+   font-weight:lighter;
+   margin: auto;
+   position:relative;
+   top:50px;
+   text-align: center;
+   align-items: center;
+   justify-content: center;
+ }
+ #overlay{
+   width:100%;
+   height:100%;
+   margin:0;
+   padding:0;
+   position:absolute;
+   border-radius: 40px;
+   background-color: rgba(240,219,219,0.5);
+ }
