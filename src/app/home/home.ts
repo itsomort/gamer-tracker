@@ -1,11 +1,22 @@
 import { Component } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  standalone: true,
+  imports: [RouterOutlet],
   templateUrl: './home.html',
-  styleUrl: './home.css'
+  styleUrls: ['./home.css']
 })
 export class Home {
+  protected title = 'gamer-tracker';
 
+  constructor(private router: Router) {}
+
+
+  onSignupNavigate(event: Event) {
+    event.preventDefault();
+    console.log('Navigating to signup page');
+    this.router.navigate(['/signup']);
+  }
 }

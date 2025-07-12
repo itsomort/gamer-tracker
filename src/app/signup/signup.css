@@ -1,3 +1,17 @@
+/* Blurred background overlay */
+.blur-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: url('blurred_background.jpg') center center / cover no-repeat;
+  filter: blur(10px) brightness(0.8);
+}
+#main_data, #floating_box {
+  position: relative;
+  z-index: 1;
+}
 .small{
    width:30px;
    right:0;
