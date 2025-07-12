@@ -22,7 +22,7 @@ body{
    font-family:"JetBrains Mono", Arial, Helvetica, sans-serif;
    font-optical-sizing: auto;
    font-weight: <weight>;
-   overflow-x: hidden;
+   overflow: hidden;
    background-color: #FEFCF3;
 }
 #home{

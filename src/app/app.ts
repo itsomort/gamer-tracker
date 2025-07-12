@@ -12,7 +12,10 @@ import { CommonModule } from '@angular/common';
 export class App {
   protected title = 'gamer-tracker';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.router.navigate(['/']);
+  }
+
 
   onSignupNavigate(event: Event) {
     event.preventDefault();
