@@ -12,14 +12,6 @@ res: {"status": 0 or 1, "sentiment": number_here}
 "status": 0 = success, "status": 1 = error
 HTTP 200 = success
 HTTP 500 = error
-
-GET /api/journal
-req: {"userid": "hashed_code"}
-res: {"status": 0 or 1, "entries": [["entry1", sentiment1], ["entry2", sentiment2], ...]}
-"status": 0 = success, "status": 1 = error
-HTTP 200 = success
-HTTP 500 = error
- * 
  */
 
 router.use(json());
@@ -30,7 +22,7 @@ router.post('/', async(req, res) => {
     // check that both fields are there
     const body = req.body;
     if(!body.userid || !body.journal_entry) {
-        res.send({"status": "ERROR", "sentiment": 0});
+        res.send({"status": 1, "sentiment": 0}).status(500);
     }
 
     // separate fields out
@@ -71,14 +63,39 @@ router.post('/', async(req, res) => {
         catch {
             res.send({"status": 1, "sentiment": 0}).status(500);
         }
-
     }
 
     res.send({"status": 0, "sentiment": sentiment}).status(200);
 });
+/*
+GET /api/journal
+req: {"userid": "hashed_code"}
+res: {"status": 0 or 1, "entries": [["entry1", sentiment1], ["entry2", sentiment2], ...]}
+"status": 0 = user found, "status": 1 = user not found
+HTTP 200 = success
+HTTP 500 = error
+*/
 
 router.get('/', async(req, res) => {
-    
+    const body = req.body;
+    if(!body.userid) {
+        res.send({"status": 1, "entries": []}).status(500);
+    }
+
+    let userid = body.userid;
+
+    // get entries from database
+    let db = await connectToDb();
+    let collection = await db.collection("tests");
+    let query = {_id: userid};
+    let result = await collection.findOne(query);
+
+    if(result === null || result.entries === null) {
+        res.send({"status": 1, "entries": []}).status(500);
+    }
+    else {
+        res.send({"status": 0, "entries": result.entries});
+    }
 });
 
 
