@@ -1,3 +1,8 @@
+.small{
+   width:30px;
+   right:0;
+
+ }
 #close-signup {
   position: absolute;
   top: 30px;
@@ -62,11 +67,23 @@ body{
  #floating_box{
    position:absolute;
    right:0%;
-   top:140px;
+   top:100px;
    width: 35%;
    margin:10px;
    border-radius: 40px;
+   background-color: #F0DBDB;
+   border: 2px solid black;
+   filter: drop-shadow(4px 4px 4px gray);
+ animation-name: example;
+  animation-duration: 1s;
+
  }
+
+@keyframes example {
+  from {right: -50%;}
+  to {right: 0%;}
+}
+
 
  #floating_box > #title {
    font-size: 2em;
@@ -94,12 +111,19 @@ body{
   justify-content: center;
 
  }
- #signup{
+
+ #inputs{
   position:relative;
   display:flex;
-  top:30px;
-  width:190px;
+  top:25px;
+  left:5px;
   margin:auto;
+
+
+ }
+
+ #signup{
+  width:190px;
   height:50px;
   border-radius: 25px;
   background-color: #DBA39A;
@@ -109,7 +133,8 @@ body{
   align-items: center;
   font-size:1.3em;
   justify-content: center;
-  right:5px;
+  float:right;
+  margin-left:80px;
 }
 
 #signup:hover{
@@ -141,3 +166,29 @@ body{
    border-radius: 40px;
    background-color: rgba(240,219,219,0.5);
  }
+
+  #signup_small{
+  width:50px;
+  margin:auto;
+  height:50px;
+  border-radius: 25px;
+  background-color: #DBA39A;
+  border: 2px solid black;
+  filter: drop-shadow(4px 4px 4px gray);
+  text-align: center;
+  align-items: center;
+  font-size:1.3em;
+  justify-content: center;
+  float:right;
+  margin-left:20px;
+}
+
+#signup_small:hover{
+      background-color: #EBB3AA;
+         cursor:pointer;
+
+ }
+ #signup_small:active{
+      background-color: #CB938A;
+ }
+
