@@ -51,6 +51,12 @@ main{
   margin-right: 0px;
   border-radius: 40px;
   background-color: #F0DBDB;
+  background-image: url("https://coolwallpapers.me/th700/5242257-pencil-book-journal-writing-notebook-diary-blank-page-creative-desk-open-new-start-tabel-note-writers-block-creative-commons-images.jpg");
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 #main_data{
