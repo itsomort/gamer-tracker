@@ -2,6 +2,8 @@ import { Router, json } from 'express';
 import { configDotenv } from 'dotenv';
 import connectToDb from '../db/mongo';
 const mongodb = require('mongodb');
+const Sentiment = require('sentiment');
+const sentiment = new Sentiment();
 configDotenv();
 
 const router = Router();
@@ -35,8 +37,8 @@ router.post('/', async(req, res) => {
     let query = {_id: userid};
     let result = await collection.findOne(query);
 
-    // TODO: sentiment analysis here
-    let sentiment = 0;
+    // sentiment analysis here
+    let sentimentScore = sentiment.analyze(body.journal_entry).score;
 
     if(result === null) {
         console.log(`User ${userid} not found`);
@@ -44,7 +46,7 @@ router.post('/', async(req, res) => {
         try {
             await collection.insertOne({
                 "_id": userid,
-                "entries": [[journal_entry, sentiment]]
+                "entries": [[journal_entry, sentimentScore]]
             });
         }
         catch {
@@ -57,7 +59,7 @@ router.post('/', async(req, res) => {
         try {
             await collection.updateOne(
                 {_id: userid},
-                {$push: {entries: [journal_entry, sentiment]}}
+                {$push: {entries: [journal_entry, sentimentScore]}}
             );
         }
         catch {
@@ -65,7 +67,7 @@ router.post('/', async(req, res) => {
         }
     }
 
-    res.send({"status": 0, "sentiment": sentiment}).status(200);
+    res.send({"status": 0, "sentiment": sentimentScore}).status(200);
 });
 /*
 GET /api/journal
