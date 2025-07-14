@@ -1,3 +1,87 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.journal-layout {
+  display: flex;
+  flex-direction: row;
+  height: 90vh;
+  width: 100vw;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.journal-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 2vw;
+  margin-top: 5vh;
+  gap: 30px;
+  min-width: 250px;
+}
+
+.journal-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 5vh;
+  position: relative;
+}
+
+#journal {
+  width: 80%;
+  min-height: 60vh;
+  background-color: #F0DBDB;
+  border-radius: 40px;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: 100px; /* space for buttons */
+}
+
+.sentiment_analysis,
+.gamer_stats,
+.gamer_time {
+  width: 225px;
+  height: 100px;
+  border-radius: 25px;
+  background-color: #DBA39A;
+  border: 2px solid black;
+  filter: drop-shadow(8px 8px 10px gray);
+  font-size: 1.5em;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+#Sentiment, #no_Sentiment {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 140px;
+  height: 50px;
+  border-radius: 25px;
+  background-color: #DBA39A;
+  border: 2px solid black;
+  filter: drop-shadow(8px 8px 10px gray);
+  font-size: 1.2em;
+  margin-left: 20px;
+}
+#no_Sentiment {
+  right: 180px;
+  width: 120px;
+}
+
+#header {
+  margin-bottom: 40px;
+}
 body{
   font-family:"JetBrains Mono", Arial, Helvetica, sans-serif;
   font-optical-sizing: auto;
