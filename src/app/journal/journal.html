@@ -31,7 +31,7 @@
            Sentiment
          </div>
          <div id="data">
-           Positive
+           {{ sentiment !== null ? sentiment : '' }}
          </div>
        </div>
        <div class="gamer_time">
@@ -45,11 +45,11 @@
      </div>
      <div class="journal-content">
        <div id="journal">
-         <form>
-           <input type="text" id="form_subject" name="subject" placeholder="Subject"><br>
-           <textarea type="text" id="form" name="main" placeholder="How was your game?"></textarea><br>
-           <input type="submit" id="Sentiment" value="Get Thoughts">
-           <input type="submit" id="no_Sentiment" value="Save">
+         <form (submit)="onSubmit($event)">
+           <input type="text" id="form_subject" name="subject" [(ngModel)]="subject" placeholder="Subject"><br>
+           <textarea id="form" name="main" [(ngModel)]="journalEntry" placeholder="How was your game?"></textarea><br>
+           <input type="submit" id="Sentiment" value="Get Thoughts" (click)="setSentimentMode(true)">
+           <input type="submit" id="no_Sentiment" value="Save" (click)="setSentimentMode(false)">
          </form>
        </div>
      </div>

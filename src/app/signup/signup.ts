@@ -11,6 +11,7 @@ import { Router, RouterModule } from '@angular/router';
   styleUrls: ['./signup.css']
 })
 export class Signup {
+  username: string = '';
   constructor(private router: Router) {}
   onSignupClick(event: Event){
     event.preventDefault();
@@ -22,7 +23,8 @@ export class Signup {
 
   onLogin(event: Event) {
     event.preventDefault();
-    console.log('onLogin called');
+    localStorage.setItem('username', this.username);
+    console.log('Username set:', this.username);
     this.router.navigate(['/journal']);
   }
 }
