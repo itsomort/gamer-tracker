@@ -40,6 +40,8 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
+app.use('/api/journal', journal);
+
 app.use((req, res, next) => {
   angularApp
     .handle(req)
@@ -63,8 +65,6 @@ if (isMainModule(import.meta.url)) {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
-
-app.use('/api/journal', journal);
 
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.

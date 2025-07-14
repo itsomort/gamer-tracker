@@ -45,11 +45,11 @@
      </div>
      <div class="journal-content">
        <div id="journal">
-         <form (submit)="onSubmit($event)">
+         <form>
            <input type="text" id="form_subject" name="subject" [(ngModel)]="subject" placeholder="Subject"><br>
            <textarea id="form" name="main" [(ngModel)]="journalEntry" placeholder="How was your game?"></textarea><br>
-           <input type="submit" id="Sentiment" value="Get Thoughts" (click)="setSentimentMode(true)">
-           <input type="submit" id="no_Sentiment" value="Save" (click)="setSentimentMode(false)">
+           <input type="button" id="Sentiment" value="Get Thoughts" (click)="onSubmit($event, true)">
+           <input type="button" id="no_Sentiment" value="Save" (click)="onSubmit($event, false)">
          </form>
        </div>
      </div>

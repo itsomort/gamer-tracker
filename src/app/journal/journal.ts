@@ -15,7 +15,6 @@ export class Journal implements OnInit {
   journalEntry: string = '';
   sentiment: number | null = null;
   username: string = '';
-  private doSentiment: boolean = false;
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -27,16 +26,14 @@ export class Journal implements OnInit {
     }
   }
 
-  setSentimentMode(val: boolean) {
-    this.doSentiment = val;
-  }
 
   onHomeNavigate(event: Event) {
     event.preventDefault();
     this.router.navigate(['/']);
   }
 
-  onSubmit(event: Event) {
+  onSubmit(event: Event, doSentiment: boolean) {
+    // alert('onSubmit called! doSentiment=' + doSentiment + ', username=' + this.username + ', entry=' + this.journalEntry);
     event.preventDefault();
     // Hash the values (later)
     const hashedUser = this.username;
@@ -53,7 +50,7 @@ export class Journal implements OnInit {
       }
     ).subscribe({
       next: response => {
-        if (this.doSentiment) this.sentiment = response.sentiment;
+        if (doSentiment) this.sentiment = response.sentiment;
         else this.sentiment = this.sentiment;
         // Optionally, show a message or update the UI
         console.log('Journal entry submitted successfully:', response);
