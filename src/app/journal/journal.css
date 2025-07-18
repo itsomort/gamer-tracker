@@ -17,10 +17,12 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 2vw;
-  margin-top: 5vh;
-  gap: 30px;
-  min-width: 250px;
+  justify-content: center;
+  height: 80vh;
+  gap: 100px; /* Controls even spacing */
+  position: fixed;
+  left: 2vw;
+  top: 10vh;
 }
 
 .journal-content {
@@ -43,9 +45,65 @@ body, html {
   padding-bottom: 100px; /* space for buttons */
 }
 
-.sentiment_analysis,
+/* Animated shapes background */
+.journal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: linear-gradient(120deg, #F0DBDB 0%, #DBA39A 100%);
+  overflow: hidden;
+}
+
+.journal-bg::before,
+.journal-bg::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.journal-bg::before {
+  width: 400px;
+  height: 400px;
+  left: 10vw;
+  top: 15vh;
+  background: #d86f58;
+  opacity: 0.35; 
+  box-shadow: 0 0 80px 40px #ffffff; 
+  animation: move-shape-1 9s linear infinite alternate;
+}
+
+.journal-bg::after {
+  width: 300px;
+  height: 300px;
+  right: 10vw;
+  bottom: 10vh;
+  background: #979797;
+  opacity: 0.28; 
+  box-shadow: 0 0 60px 30px #ffffff; 
+  animation: move-shape-2 7s linear infinite alternate; 
+}
+
+@keyframes move-shape-1 {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(40px) scale(1.1); }
+  100% { transform: translateY(-40px) scale(0.95); }
+}
+@keyframes move-shape-2 {
+  0% { transform: translateX(0) scale(1); }
+  50% { transform: translateX(-60px) scale(1.05); }
+  100% { transform: translateX(60px) scale(0.9); }
+}
+
 .gamer_stats,
+.sentiment_analysis,
 .gamer_time {
+  position: relative;
   width: 225px;
   height: 100px;
   border-radius: 25px;
@@ -53,12 +111,45 @@ body, html {
   border: 2px solid black;
   filter: drop-shadow(8px 8px 10px gray);
   font-size: 1.5em;
-  margin: 0;
+  margin: 0 !important; /* Remove all margin */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 10px;
+}
+
+
+.counter-controls {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2;
+}
+
+.counter-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  background: #DBA39A;
+  color: #333;
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.10);
+  transition: background 0.2s, color 0.2s;
+}
+
+.counter-btn:hover {
+  background: #ffffff;
+  color: #000000;
 }
 
 #Sentiment, #no_Sentiment {
@@ -185,15 +276,69 @@ body{
   filter: drop-shadow(8px 8px 10px gray);
 }
 
-#journal{
-  width:65%;
-  height:90%;
-  position:relative;
+.stopwatch-controls {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2;
+}
+
+.stopwatch-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  background: #DBA39A;
+  color: #333;
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.10);
+  transition: background 0.2s, color 0.2s;
+}
+
+.stopwatch-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.clear-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid #333;
+  background: #DBA39A;
+  color: #333;
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.10);
+  transition: background 0.2s, color 0.2s;
+}
+
+.clear-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+#journal {
+  width: 65%;
+  height: 90%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #F0DBDB;
-  float:right;
-  top:10%;
-  right:10%;
-  border-radius:40px;
+  border-radius: 40px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.20);
 }
 
 #form_subject{

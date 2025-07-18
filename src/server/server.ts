@@ -40,7 +40,7 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.use('/api/journal', journal);
+app.use('/api/journal', journal); // moved from line 68 to here and IT WORKS - lucas
 
 app.use((req, res, next) => {
   angularApp

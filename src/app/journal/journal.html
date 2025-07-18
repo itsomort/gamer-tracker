@@ -8,24 +8,25 @@
 
 
  <body>
+  <div class="journal-bg"></div>
    <div id="header">
     <button id="profile">
       AU
     </button>
     <button id="home" (click)="onHomeNavigate($event)">
-      home
+      Home
     </button>
    </div>
    <div class="journal-layout">
      <div class="journal-sidebar">
-       <div class="gamer_stats">
-         <div id="title">
-           Games Played
-         </div>
-         <div id="data">
-           5 Games
-         </div>
-       </div>
+      <div class="gamer_stats">
+        <div id="title">Games Played</div>
+        <div id="data">{{ gamesPlayed }} Games</div>
+        <div class="counter-controls">
+          <button class="counter-btn up" (click)="incrementGames()">🡅</button>
+          <button class="counter-btn down" (click)="decrementGames()">🡇</button>
+        </div>
+      </div>
        <div class="sentiment_analysis">
          <div id="title">
            Sentiment
@@ -35,13 +36,15 @@
          </div>
        </div>
        <div class="gamer_time">
-         <div id="title">
-           Session Time
-         </div>
-         <div id="data">
-           120 min
-         </div>
-       </div>
+        <div id="title">Session Time</div>
+        <div id="data">{{ sessionTimeDisplay }}</div>
+        <div class="stopwatch-controls">
+          <button class="stopwatch-btn" (click)="toggleSessionTimer()">
+            <span [innerHTML]="sessionTimerRunning ? '&#9208;' : '&#9654;'"></span>
+          </button>
+          <button class="clear-btn" (click)="clearSessionTime()">■</button>
+        </div>
+      </div>
      </div>
      <div class="journal-content">
        <div id="journal">
