@@ -1,6 +1,13 @@
 <!-- temp, delete -->
  <head>
    <link rel="stylesheet" href="./journal.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <script>
+   console.out.println("hi");
+$(window).scroll(function(){
+    $("#journal_side").css({"top": ($(window).scrollTop()+30) + "px", "margin-left":($(window).scrollLeft()) + "px"});
+  });
+ </script>
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
@@ -14,11 +21,11 @@
       AU
     </button>
     <button id="home" (click)="onHomeNavigate($event)">
-      Home
+      Past thoughts
     </button>
    </div>
    <div class="journal-layout">
-     <div class="journal-sidebar">
+     <div class="journal-sidebar" id="journal_side">
       <div class="gamer_stats">
         <div id="title">Games Played</div>
         <div id="data">{{ gamesPlayed }} Games</div>
@@ -44,17 +51,18 @@
           </button>
           <button class="clear-btn" (click)="clearSessionTime()">■</button>
         </div>
-      </div>
      </div>
+    </div>
      <div class="journal-content">
        <div id="journal">
          <form>
-           <input type="text" id="form_subject" name="subject" [(ngModel)]="subject" placeholder="Subject"><br>
-           <textarea id="form" name="main" [(ngModel)]="journalEntry" placeholder="How was your game?"></textarea><br>
-           <input type="button" id="Sentiment" value="Get Thoughts" (click)="onSubmit($event, true)">
            <input type="button" id="no_Sentiment" value="Save" (click)="onSubmit($event, false)">
+           <input type="button" id="Sentiment" value="Ask Chat" (click)="onSubmit($event, true)">
+           <input type="text" id="form_subject" name="subject" [(ngModel)]="subject" placeholder="Subject"><br>
+           <textarea wrap="soft" rows="100" id="form" name="main" [(ngModel)]="journalEntry" placeholder="How was your game?"></textarea><br>
          </form>
        </div>
      </div>
-   </div>
+  </div>
  </body>
+
