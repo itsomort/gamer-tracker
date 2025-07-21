@@ -1,10 +1,10 @@
 import { Router, json } from 'express';
-import { configDotenv } from 'dotenv';
 import connectToDb from '../db/mongo';
-const mongodb = require('mongodb');
+
+// TODO: replace with local AI 
+// whatever has the smallest weights
 const Sentiment = require('sentiment');
 const sentiment = new Sentiment();
-configDotenv();
 
 const router = Router();
 /**
@@ -19,12 +19,14 @@ HTTP 500 = error
 router.use(json());
 
 router.post('/', async(req, res) => {
+    console.log("got post to /api/journal")
     // write journal entry to document with _id of hashed_code
 
     // check that both fields are there
     const body = req.body;
     if(!body.userid || !body.journal_entry) {
         res.send({"status": 1, "sentiment": 0}).status(500);
+        return;
     }
 
     // separate fields out

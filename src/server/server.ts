@@ -7,13 +7,20 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 import { configDotenv } from 'dotenv';
+import passport from 'passport';
+const { expressjwt: jwt } = require('express-jwt');
+
 import journal from './routes/journal';
+import auth from './routes/auth';
+import profile from './routes/profile';
 configDotenv();
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+const jwt_secret = process.env.JWT_SECRET || "something bad";
 
+const jwtAuth = jwt({ secret: jwt_secret, algorithms: ["HS256"] });
 /**
  * Example Express Rest API endpoints can be defined here.
  * Uncomment and define endpoints as necessary.
@@ -29,6 +36,16 @@ const angularApp = new AngularNodeAppEngine();
 /**
  * Serve static files from /browser
  */
+
+app.use(passport.initialize());
+
+app.use('/api/profile', jwtAuth, profile);
+app.use('/api/user', auth);
+app.use('/api/journal', journal);
+
+// protected route
+
+
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
@@ -63,8 +80,6 @@ if (isMainModule(import.meta.url)) {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
-
-app.use('/api/journal', journal);
 
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
