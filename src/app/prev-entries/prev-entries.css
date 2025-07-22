@@ -1,3 +1,82 @@
+ #generated_journal{
+   z-index:3;
+   background-color:grey;
+   position: absolute;
+   border-radius: 25px;
+   border: 2px solid black;
+   background-color: #BB837A;
+   border-top-left-radius:5px;
+   filter: drop-shadow(8px 8px 10px gray);
+   width:56%;
+
+   height:400%;
+   margin-left:20%;
+   background-color: #BB837A;
+ }
+
+ #body{
+   position:absolute;
+   top:15%;
+   padding-left:5px;
+ }
+
+ @keyframes example {
+   0%   {width:56%; height:400%;}
+  75%  {width:65%; height:410%;}
+  100% {width:56%; height:400%;}
+  }
+ #generated_journal > #header{
+   transform: translateX(-100%);
+   border-top-left-radius: 10px;
+   border-bottom-left-radius: 10px;
+   border-left: 2px solid black;
+   border-top: 2px solid black;
+   border-bottom: 2px solid black;
+   background-color: #BB837A;
+   width:25%;
+   margin-top:1%;
+   padding-top:1%;
+   padding-left:1%;
+   font-size: 1.2em;
+   font-style:oblique;
+   font-weight:bold;
+ }
+
+
+  #generated_journal:hover{
+  z-index:5;
+  animation-name: example;
+  animation-duration: 1s;
+  background-color: #DBA39A;
+ }
+
+#generated_journal:hover > #header{
+  background-color: #DBA39A;
+ }
+
+
+#generated_journal:hover ~ #journal_side{
+   z-index:5;
+ }
+
+ #generated_journal > #body{
+   font-size: 2em;
+   font-style:oblique;
+   font-weight:lighter;
+ }
+
+ tr{
+   height:50px;
+ }
+ table{
+   position:absolute;
+   top:25%;
+   width:100%;
+ }
+
+
+
+
 body, html {
   height: 100%;
   margin: 0;
@@ -19,13 +98,19 @@ body, html {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  height: 80vh;
+  height: 60vh;
   gap: 5%; /* Controls even spacing */
-  z-index:5;
-  position: fixed;
-  top: 20%;
-  left: 1%;
-}
+  z-index:3;
+  position: absolute;
+  top: 10%;
+  right: 0;
+  padding:3%;
+  /*background-color:#F0DBDB;
+  border-radius:25px;
+  border: 2px solid black;
+   filter: drop-shadow(8px 8px 10px gray);
+  */
+   }
 
 
 .journal-content {
@@ -107,7 +192,7 @@ body, html {
 .sentiment_analysis,
 .gamer_time {
   position: relative;
-  width: 250px;
+  width: 200px;
   height: 20%;
   border-radius: 25px;
   background-color: #DBA39A;
@@ -441,3 +526,6 @@ form {
    align-items: center;
    justify-content: center;
 }
+
+
+

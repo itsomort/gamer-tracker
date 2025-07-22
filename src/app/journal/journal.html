@@ -8,50 +8,54 @@
 
 
  <body>
+  <div class="journal-bg"></div>
    <div id="header">
     <button id="profile">
       AU
     </button>
     <button id="home" (click)="onHomeNavigate($event)">
-      home
+      Past thoughts
     </button>
    </div>
    <div class="journal-layout">
-     <div class="journal-sidebar">
-       <div class="gamer_stats">
-         <div id="title">
-           Games Played
-         </div>
-         <div id="data">
-           5 Games
-         </div>
-       </div>
+     <div class="journal-sidebar" id="journal_side">
+      <div class="gamer_stats">
+        <div id="title">Games Played</div>
+        <div id="data">{{ gamesPlayed }} Games</div>
+        <div class="counter-controls">
+          <button class="counter-btn up" (click)="incrementGames()">🡅</button>
+          <button class="counter-btn down" (click)="decrementGames()">🡇</button>
+        </div>
+      </div>
        <div class="sentiment_analysis">
          <div id="title">
            Sentiment
          </div>
          <div id="data">
-           Positive
+           {{ sentiment !== null ? sentiment : '' }}
          </div>
        </div>
        <div class="gamer_time">
-         <div id="title">
-           Session Time
-         </div>
-         <div id="data">
-           120 min
-         </div>
-       </div>
+        <div id="title">Session Time</div>
+        <div id="data">{{ sessionTimeDisplay }}</div>
+        <div class="stopwatch-controls">
+          <button class="stopwatch-btn" (click)="toggleSessionTimer()">
+            <span [innerHTML]="sessionTimerRunning ? '&#9208;' : '&#9654;'"></span>
+          </button>
+          <button class="clear-btn" (click)="clearSessionTime()">■</button>
+        </div>
      </div>
+    </div>
      <div class="journal-content">
        <div id="journal">
          <form>
-           <input type="text" id="form_subject" name="subject" placeholder="Subject"><br>
-           <textarea type="text" id="form" name="main" placeholder="How was your game?"></textarea><br>
-           <input type="submit" id="Sentiment" value="Get Thoughts">
-           <input type="submit" id="no_Sentiment" value="Save">
+           <input type="button" id="no_Sentiment" value="Save" (click)="onSubmit($event, false)">
+           <input type="button" id="Sentiment" value="Ask Chat" (click)="onSubmit($event, true)">
+           <input type="text" id="form_subject" name="subject" [(ngModel)]="subject" placeholder="Subject"><br>
+           <textarea wrap="soft" rows="100" id="form" name="main" [(ngModel)]="journalEntry" placeholder="How was your game?"></textarea><br>
          </form>
        </div>
      </div>
-   </div>
+  </div>
  </body>
+
