@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:gamer-tracker": "node dist/gamer-tracker/server/server.mjs"
+    "serve:ssr:gamer-tracker": "node dist/gamer-tracker/server/server.mjs",
+    "start-server": "npm run build && npm run serve:ssr:gamer-tracker"
   },
   "prettier": {
     "overrides": [
@@ -29,13 +30,18 @@
     "@angular/platform-server": "^20.0.0",
     "@angular/router": "^20.0.0",
     "@angular/ssr": "^20.0.4",
+    "@types/passport-local": "^1.0.38",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
+    "express-jwt": "^8.5.1",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "rxjs": "~7.8.0",
     "sentiment": "^5.0.2",
     "sha.js": "^2.4.12",
@@ -51,6 +57,7 @@
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
+    "@types/passport": "^1.0.17",
     "@wdio/schematics": "^1.2.1",
     "jasmine-core": "~5.7.0",
     "karma": "~6.4.0",
