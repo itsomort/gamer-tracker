@@ -8,8 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:gamer-tracker": "node dist/gamer-tracker/server/server.mjs",
-    "start-server": "npm run build && npm run serve:ssr:gamer-tracker",
-    "dev-server": "npm run watch && npm run serve:ssr:gamer-tracker"
+    "start-server": "npm run build && npm run serve:ssr:gamer-tracker"
   },
   "prettier": {
     "overrides": [
