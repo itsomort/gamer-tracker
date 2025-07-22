@@ -1,0 +1,126 @@
+ <!-- temp, delete -->
+ <head>
+   <link rel="stylesheet" href="./prev-entries.css">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100.. 800;1,100..800&display=swap" rel="stylesheet">
+ </head>
+
+ <body>
+   <div class="journal-bg"></div>
+   <div id="header">
+     <button id="profile">
+       AU
+     </button>
+     <button id="home" >
+       Return
+     </button>
+   </div>
+
+   <div class="data">
+     <!-- This is where data is stored from the users game time and stats -->
+   </div>
+
+   <div class="prev-journal">
+
+     <table>
+     <!-- store previous journals in this div as the below example
+       <tr>
+         <td>
+           <div id="generated_journal">
+             <div id="header">
+               Subject Line
+             </div>
+             <div id="body">
+               The paragraphs of the journal entry
+             </div>
+           </div>
+         </td>
+       </tr>
+     -->
+
+       <tr>
+         <td>
+           <div id="generated_journal">
+             <div id="header">
+               Subject Line 1
+             </div>
+             <div id="body">
+               The paragraphs of the journal entry
+             </div>
+           </div>
+           <div class="journal-sidebar" id="journal_side">
+             <div class="gamer_stats">
+               <div id="title">Games Played</div>
+               <div id="data">Games</div>
+               <div class="counter-controls">
+                 <button class="counter-btn up" >🡅</button>
+                 <button class="counter-btn down">🡇</button>
+               </div>
+             </div>
+              <div class="sentiment_analysis">
+                <div id="title">
+                  Sentiment
+                </div>
+                <div id="data">
+                </div>
+              </div>
+              <div class="gamer_time">
+               <div id="title">Session Time</div>
+               <div id="data"></div>
+               <div class="stopwatch-controls">
+                 <button class="stopwatch-btn" >
+                   <span [innerHTML]="&#9654;"></span>
+                 </button>
+                 <button class="clear-btn" >■</button>
+               </div>
+            </div>
+           </div>
+         </td>
+       </tr>
+
+       <tr>
+         <td>
+           <div id="generated_journal">
+             <div id="header">
+               Subject Line 2
+             </div>
+             <div id="body">
+               The paragraphs of the journal entry
+             </div>
+           </div>
+           <div class="journal-sidebar" id="journal_side">
+             <div class="gamer_stats">
+               <div id="title">Games Played</div>
+               <div id="data">Games</div>
+               <div class="counter-controls">
+                 <button class="counter-btn up" >🡅</button>
+                 <button class="counter-btn down">🡇</button>
+               </div>
+             </div>
+              <div class="sentiment_analysis">
+                <div id="title">
+                  Sentiment
+                </div>
+                <div id="data">
+                </div>
+              </div>
+              <div class="gamer_time">
+               <div id="title">Session Time</div>
+               <div id="data"></div>
+               <div class="stopwatch-controls">
+                 <button class="stopwatch-btn" >
+                   <span [innerHTML]="&#9654;"></span>
+                 </button>
+                 <button class="clear-btn" >■</button>
+               </div>
+            </div>
+           </div>
+
+         </td>
+       </tr>
+
+     </table>
+   </div>
+
+ </body>

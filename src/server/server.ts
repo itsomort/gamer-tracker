@@ -54,9 +54,6 @@ app.use(
   }),
 );
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
 app.use((req, res, next) => {
   angularApp
     .handle(req)
@@ -87,7 +84,6 @@ function errorhandler(err: any, req: any, res: any, next: any) {
 }
 
 app.use(errorhandler);
-
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
  */
