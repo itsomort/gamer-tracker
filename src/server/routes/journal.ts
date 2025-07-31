@@ -23,11 +23,10 @@ router.post('/', async (req: any, res: any) => {
   console.log("got post to /api/journal");
 
   const payload = req.auth;
-  if (!payload) {
-    return res.status(401).send({ status: 1, sentiment: 0, advice: " " });
-  }
-
   const userId = payload.username;
+  if (!payload || !userId) {
+    return res.status(401).send({ status: 1, sentiment: 0, advice: "" });
+  }
   const { subject, journal_entry, session_time } = req.body;
 
   // Validate the journal entry
@@ -77,11 +76,10 @@ router.post('/', async (req: any, res: any) => {
 
 router.get('/', async (req: any, res: any) => {
   const payload = req.auth;
-  if (!payload) {
+  const userId = payload.username;
+  if (!payload || !userId) {
     return res.status(401).send({ status: 1, entries: [] });
   }
-
-  const userId = payload.username;
 
   try {
     const db = await connectToDb();
