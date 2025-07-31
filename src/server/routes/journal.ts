@@ -24,15 +24,15 @@ router.post('/', async (req: any, res: any) => {
 
   const payload = req.auth;
   if (!payload) {
-    return res.status(401).send({ status: 1, sentiment: 0 });
+    return res.status(401).send({ status: 1, sentiment: 0, advice: " " });
   }
 
-  const userId = payload.username || payload.email;
-  const { journal_entry } = req.body;
+  const userId = payload.username;
+  const { subject, journal_entry, session_time } = req.body;
 
   // Validate the journal entry
-  if (!journal_entry) {
-    return res.status(400).send({ status: 1, sentiment: 0 });
+  if (!journal_entry || !subject || !session_time) {
+    return res.status(400).send({ status: 1, sentiment: 0, advice: " "});
   }
 
   try {
@@ -41,6 +41,7 @@ router.post('/', async (req: any, res: any) => {
 
     // Analyze sentiment score
     const sentimentScore = sentiment.analyze(journal_entry).score;
+    const advice = "Hehehe placeholder for AI advice";
 
     // Insert or update user's journal entry
     const result = await collection.findOne({ _id: userId });
@@ -48,20 +49,20 @@ router.post('/', async (req: any, res: any) => {
       console.log(`User ${userId} not found`);
       await collection.insertOne({
         _id: userId,
-        entries: [[journal_entry, sentimentScore]]
+        entries: [[subject,journal_entry, session_time, sentimentScore]]
       });
     } else {
       console.log(`User ${userId} found`);
       await collection.updateOne(
         { _id: userId },
-        { $push: { entries: [journal_entry, sentimentScore] } }
+        { $push: { entries: [subject, journal_entry, session_time, sentimentScore] } }
       );
     }
 
-    return res.status(200).send({ status: 0, sentiment: sentimentScore });
+    return res.status(200).send({ status: 0, sentiment: sentimentScore, advice: advice });
   } catch (err) {
     console.error(err);
-    return res.status(500).send({ status: 1, sentiment: 0 });
+    return res.status(500).send({ status: 1, sentiment: 0, advice: " "});
   }
 });
 
@@ -80,7 +81,7 @@ router.get('/', async (req: any, res: any) => {
     return res.status(401).send({ status: 1, entries: [] });
   }
 
-  const userId = payload.username || payload.email;
+  const userId = payload.username;
 
   try {
     const db = await connectToDb();
