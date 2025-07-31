@@ -42,7 +42,7 @@ app.use(passport.initialize());
 
 app.use('/api/user', auth);
 // protected routes
-app.use('/api/journal', journal);
+app.use('/api/journal', jwtAuth, journal);
 app.use('/api/profile', jwtAuth, profile);
 
 

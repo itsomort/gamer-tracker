@@ -79,7 +79,7 @@ router.post('/register', async(req, res) => {
 
 router.post('/login', (req, res, next) => {
     // authenticate with passport
-
+    
     console.log("login route called");
 
     if(!req.body.username || !req.body.password) {

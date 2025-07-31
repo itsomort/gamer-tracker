@@ -1,22 +1,11 @@
 import { Router, json } from 'express';
 import connectToDb from '../db/mongo';
-
 // TODO: replace with local AI 
 // whatever has the smallest weights
 const Sentiment = require('sentiment');
 const sentiment = new Sentiment();
 
 const router = Router();
-/**
- * TODO : UPDATE WITH AUTH
-POST /api/journal 
-req: {"userid": "hashed_code", "journal_entry": "journal entry here"}
-res: {"status": 0 or 1, "sentiment": number_here}
-"status": 0 = success, "status": 1 = error
-HTTP 200 = success
-HTTP 500 = error
- */
-
 // NEW ROUTE
 /**
  * PROTECTED ROUTE, REQUIRES JWT AUTH
@@ -30,68 +19,51 @@ HTTP 500 = error
 
 router.use(json());
 
-router.post('/', async(req, res) => {
-    console.log("got post to /api/journal")
-    // write journal entry to document with _id of hashed_code
+router.post('/', async (req: any, res: any) => {
+  console.log("got post to /api/journal");
 
-    // check that both fields are there
-    const body = req.body;
-    if(!body.userid || !body.journal_entry) {
-        res.send({"status": 1, "sentiment": 0}).status(400);
-        return;
+  const payload = req.auth;
+  if (!payload) {
+    return res.status(401).send({ status: 1, sentiment: 0 });
+  }
+
+  const userId = payload.username || payload.email;
+  const { journal_entry } = req.body;
+
+  // Validate the journal entry
+  if (!journal_entry) {
+    return res.status(400).send({ status: 1, sentiment: 0 });
+  }
+
+  try {
+    const db = await connectToDb();
+    const collection = await db.collection("tests");
+
+    // Analyze sentiment score
+    const sentimentScore = sentiment.analyze(journal_entry).score;
+
+    // Insert or update user's journal entry
+    const result = await collection.findOne({ _id: userId });
+    if (!result) {
+      console.log(`User ${userId} not found`);
+      await collection.insertOne({
+        _id: userId,
+        entries: [[journal_entry, sentimentScore]]
+      });
+    } else {
+      console.log(`User ${userId} found`);
+      await collection.updateOne(
+        { _id: userId },
+        { $push: { entries: [journal_entry, sentimentScore] } }
+      );
     }
 
-    // separate fields out
-    const userid = body.userid;
-    const journal_entry = body.journal_entry;
-
-    // find document associated with userid
-    let db = await connectToDb();
-    let collection = await db.collection("tests");
-    let query = {_id: userid};
-    let result = await collection.findOne(query);
-
-    // sentiment analysis here
-    let sentimentScore = sentiment.analyze(body.journal_entry).score;
-
-    if(result === null) {
-        console.log(`User ${userid} not found`);
-        // insert new document with userid and journal entry
-        try {
-            await collection.insertOne({
-                "_id": userid,
-                "entries": [[journal_entry, sentimentScore]]
-            });
-        }
-        catch {
-            res.send({"status": 1, "sentiment": 0}).status(500);
-        }
-    }
-    else {
-        console.log(`User ${userid} found`);
-        // update document with new journal entry
-        try {
-            await collection.updateOne(
-                {_id: userid},
-                {$push: {entries: [journal_entry, sentimentScore]}}
-            );
-        }
-        catch {
-            res.send({"status": 1, "sentiment": 0}).status(500);
-        }
-    }
-
-    res.send({"status": 0, "sentiment": sentimentScore}).status(200);
+    return res.status(200).send({ status: 0, sentiment: sentimentScore });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ status: 1, sentiment: 0 });
+  }
 });
-/*
-TODO: REMOVE THESE VERSIONS
-GET /api/journal
-req: {"userid": "hashed_code"}
-res: {"status": 0 or 1, "entries": [["entry1", sentiment1], ["entry2", sentiment2], ...]}
-"status": 0 = user found, "status": 1 = user not found
-HTTP 200 = success
-HTTP 500 = error
-*/
 
 // UPDATED WITH AUTH
 /**
@@ -102,28 +74,28 @@ HTTP 500 = error
  * res: {"status": 0 or 1, "entries": [["entry1", sentiment1], ["entry2", sentiment2], ...]}
  */
 
-router.get('/', async(req, res) => {
-    const body = req.body;
-    if(!body.userid) {
-        res.send({"status": 1, "entries": []}).status(400);
+router.get('/', async (req: any, res: any) => {
+  const payload = req.auth;
+  if (!payload) {
+    return res.status(401).send({ status: 1, entries: [] });
+  }
+
+  const userId = payload.username || payload.email;
+
+  try {
+    const db = await connectToDb();
+    const collection = await db.collection("tests");
+    const result = await collection.findOne({ _id: userId });
+
+    if (!result || !result.entries) {
+      return res.status(404).send({ status: 1, entries: [] });
     }
 
-    let userid = body.userid;
-
-    // get entries from database
-    let db = await connectToDb();
-    let collection = await db.collection("tests");
-    let query = {_id: userid};
-    let result = await collection.findOne(query);
-
-    if(result === null || result.entries === null) {
-        res.send({"status": 1, "entries": []}).status(500);
-    }
-    else {
-        res.send({"status": 0, "entries": result.entries});
-    }
+    return res.status(200).send({ status: 0, entries: result.entries });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ status: 1, entries: [] });
+  }
 });
-
-
 
 export default router;
