@@ -1,0 +1,70 @@
+body{
+  font-family:"JetBrains Mono", Arial, Helvetica, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  overflow: scroll;
+  overflow-x:hidden;
+  background-color: #FEFCF3;
+}
+
+
+#main_panel{
+  background-color:#DBA39A;
+  border-radius: 25px;
+  align: center;
+  padding: 15px;
+  height:90%;
+  filter: drop-shadow(8px 8px 10px gray);
+
+}
+
+#users, #journals{
+  float: left;
+  background-color: #FEFCF3;
+  border-radius: 25px;
+  padding: 15px;
+  width:80%;
+  margin:15px;
+  height:40%;
+  overflow-y:scroll
+}
+#user{
+  background-color: #FEFCF3;
+  border: 0px;
+  width:100%;
+  font-size: 1.2em;
+}
+
+#user:hover , #journal:hover{
+  background-color: #DEDCD3;
+}
+
+#admin-button{
+  font-size: 1.2em;
+  width: 120px;
+  height: 50px;
+  border-radius: 25px;
+  background-color: #DBA39A;
+  border: 2px solid black;
+  filter: drop-shadow(8px 8px 10px gray);
+  margin:15px;
+}
+
+#admin-button:hover{
+  background-color: #EBB3AA;
+}
+
+input{
+  opacity:0;
+  position:absolute;
+  width:100%;
+}
+label{
+  margin:auto;
+}
+
+input:checked ~ label{
+  background-color: #DBA39A;
+  width:100%;
+}
+
