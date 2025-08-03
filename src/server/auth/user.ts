@@ -29,7 +29,7 @@ export async function checkPassword(username: string, password: string) {
     }
 }
 
-export function generateJWT(email: string, username: string,type: number) {
+export function generateJWT(email: string, username: string) {
     var expire = new Date();
     // token expires after a week
     expire.setDate(expire.getDate() + 7);
@@ -37,7 +37,6 @@ export function generateJWT(email: string, username: string,type: number) {
     return jwt.sign({
         email: email,
         username: username,
-        type: type,
         exp: expire.getTime() / 1000
     }, process.env.JWT_SECRET,
     {algorithm: "HS256"});

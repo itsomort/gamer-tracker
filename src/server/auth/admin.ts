@@ -6,52 +6,44 @@ router.use(json());
 /**
  * PROTECTED ROUTE, REQUIRES JWT AUTH + TYPE: 1 IN DB (verify in route)
  * GET api/admin/journal
- * req: {"username": username}
+ * req: {"username": admin}
  * res: {"status": 0 or 1, "entries": journal entries}
  * Access journal entries from administrator account
  */
 router.get('/journal', async (req: any, res: any) => {
   const payload = req.auth;
-
-  if (!payload || payload.username !== 'admin') {
-    console.log(" Unauthorized: Missing or incorrect admin username");
-    return res.status(401).json({ status: 1, message: "Unauthorized: non-admin user" });
-  }
-
-  if (payload.type !== 1) {
-    console.log("Unauthorized: Valid username but wrong type");
-    return res.status(403).json({ status: 1, message: "User is not an admin" });
-  }
-
-  const username = req.query.username as string;
-  console.log("Query username:", username);
-
-  if (!username) {
-    console.log("Missing username in query");
-    return res.status(400).send({ status: 1, entries: [] });
+  const targetUsername = req.query.username as string;
+  if (!payload || !payload.username || !targetUsername) {
+    return res.status(400).json({status: 1, entries: []});
   }
 
   try {
     const db = await connectToDb();
-    const collection = db.collection("tests");
-    console.log("Connected to DB and collection");
+    const userCol = db.collection("user-tests");
+    const journalCol = db.collection("tests");
 
-    const result = await collection.findOne({ _id: username });
-    console.log("Query result from DB:", result);
-
-    if (!result || !result.entries) {
-      console.log("No entries found for this user");
-      return res.status(404).send({ status: 1, entries: [] });
+    const adminUser = await userCol.findOne({ username: payload.username, type: 1 });
+    if (!adminUser) {
+      return res.status(403).json({status: 1, entries: []});
     }
 
-    console.log("Entries found, sending response");
-    return res.status(200).send({ status: 0, entries: result.entries });
+    // Retrieve the journal entries for the requested user
+    const userData = await journalCol.findOne({ _id: targetUsername });
+
+    if (!userData || !userData.entries) {
+      return res.status(404).json({status: 1, entries: []});
+    }
+
+    return res.status(200).json({status: 0, entries: userData.entries});
   } catch (err) {
     console.error("Admin GET journal error:", err);
-    return res.status(500).send({ status: 1, entries: [] });
+    return res.status(500).json({
+      status: 1,
+      message: "Server error",
+      entries: []
+    });
   }
 });
-
 
 /**
  * PROTECTED ROUTE, REQUIRES JWT AUTH + TYPE: 1 IN DB (verify in route)
@@ -61,30 +53,40 @@ router.get('/journal', async (req: any, res: any) => {
  * Deletes user account and associated user entries
  */
 router.post('/delete-user', async (req: any, res: any) => {
-    const payload = req.auth;
-    if (!payload || payload.type !== 1 || payload.username !== "admin") {
-        return res.status(401).send({ status: 1 });
+  const payload = req.auth;
+  const { username: targetUsername } = req.body;
+
+  if (!payload || !payload.username || !targetUsername) {
+    return res.status(400).json({status: 1});
+  }
+
+  try {
+    const db = await connectToDb();
+    const userCol = db.collection("user-tests");
+    const journalCol = db.collection("tests");
+
+    const adminUser = await userCol.findOne({ username: payload.username, type: 1 });
+    if (!adminUser) {
+      return res.status(403).json({status: 1 });
     }
 
-    const { username } = req.body;
-    if (!username) {
-        return res.status(400).send({ status: 1 });
+    // Delete user from user-tests
+    const userDeleteResult = await userCol.deleteOne({ username: targetUsername });
+
+    // Delete user's journal entries
+    const journalDeleteResult = await journalCol.deleteOne({ _id: targetUsername });
+
+    if (userDeleteResult.deletedCount === 0 && journalDeleteResult.deletedCount === 0) {
+      return res.status(404).json({status: 1, message: "User not found"});
     }
 
-    try {
-        const db = await connectToDb();
-        const userCol = db.collection("user-tests");
-        const journalCol = db.collection("tests");
-
-        await userCol.deleteOne({ username });
-        await journalCol.deleteOne({ _id: username });
-
-        return res.status(200).send({ status: 0 });
-    } catch (err) {
-        console.error("Admin DELETE user error:", err);
-        return res.status(500).send({ status: 1 });
-    }
+    return res.status(200).json({ status: 0, message: "User and journal data deleted"});
+  } catch (err) {
+    console.error("Admin DELETE user error:", err);
+    return res.status(500).json({status: 1});
+  }
 });
+
 /**
  * POST api/admin/delete-journal
  * req: {"username": username}
@@ -92,30 +94,38 @@ router.post('/delete-user', async (req: any, res: any) => {
  * Deletes all entries related to specific user account
  */
 router.post('/delete-journal', async (req: any, res: any) => {
-    const payload = req.auth;
-    if (!payload || payload.type !== 1 || payload.username !== "admin") {
-        return res.status(401).send({ status: 1 });
+  const payload = req.auth;
+  const { username: targetUsername } = req.body;
+
+  if (!payload || !payload.username || !targetUsername) {
+    return res.status(400).json({status: 1});
+  }
+
+  try {
+    const db = await connectToDb();
+    const userCol = db.collection("user-tests");
+    const journalCol = db.collection("tests");
+
+    // Verify admin identity
+    const adminUser = await userCol.findOne({ username: payload.username, type: 1 });
+    if (!adminUser) {
+      return res.status(403).json({status: 1});
     }
 
-    const { username } = req.body;
-    if (!username) {
-        return res.status(400).send({ status: 1 });
+    const updateResult = await journalCol.updateOne(
+      { _id: targetUsername },
+      { $set: { entries: [] } }
+    );
+
+    if (updateResult.matchedCount === 0) {
+      return res.status(404).json({status: 1});
     }
 
-    try {
-        const db = await connectToDb();
-        const collection = db.collection("tests");
-
-        await collection.updateOne(
-        { _id: username },
-        { $set: { entries: [] } }
-        );
-
-        return res.status(200).send({ status: 0 });
-    } catch (err) {
-        console.error("Admin DELETE journal error:", err);
-        return res.status(500).send({ status: 1 });
-    }
+    return res.status(200).json({status: 0});
+  } catch (err) {
+    console.error("Admin DELETE journal error:", err);
+    return res.status(500).json({status: 1});
+  }
 });
 
 export default router;

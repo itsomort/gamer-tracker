@@ -47,7 +47,7 @@ router.post('/register', async(req, res) => {
 
     // create hashed password and jwt token
     let [salt, hash] = generateHash(req.body.password);
-    let token = generateJWT(req.body.email, req.body.username, 0);
+    let token = generateJWT(req.body.email, req.body.username);
 
     // creating new document without _id lets mongo make one for us
     // write email, username, hashed password, and salt to db
@@ -108,7 +108,7 @@ router.post('/login', (req, res, next) => {
 
         // result = result from looking up db
         if(result) {
-            const token = generateJWT(result.email, result.username, result.type);
+            const token = generateJWT(result.email, result.username);
             console.log("generated new token from login");
             res.status(200).json({"status": 0, "token": token});
         } else {
