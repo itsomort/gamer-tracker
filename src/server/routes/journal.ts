@@ -1,9 +1,32 @@
 import { Router, json } from 'express';
 import connectToDb from '../db/mongo';
+import { GoogleGenAI } from '@google/genai';
+import { configDotenv } from 'dotenv';
 // TODO: replace with local AI 
 // whatever has the smallest weights
 const Sentiment = require('sentiment');
 const sentiment = new Sentiment();
+configDotenv();
+const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
+
+async function getAdvice(journal_entry: string, sentimentScore: any, session_time: any) {
+  let prompt = `You are an interactive gaming journaling assistant.\
+Your job is to give players short, supportive advice based on their current gaming session.\
+You will receive the player's journal entry, a sentiment analysis score, \
+and the total session time in hours and minutes. Based on this information, \
+respond with a brief, single-sentence recommendation: either continue playing, \
+take a short break, or end the session for the night. Be thoughtful, motivational, and concise.\
+Input:\n
+Session time: ${session_time}\n
+Sentiment score: ${sentimentScore}\n
+Journal entry: ${journal_entry}`
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash-lite",
+    contents: prompt
+  });
+
+  return response.text;
+}
 
 const router = Router();
 // NEW ROUTE
@@ -40,7 +63,7 @@ router.post('/', async (req: any, res: any) => {
 
     // Analyze sentiment score
     const sentimentScore = sentiment.analyze(journal_entry).score;
-    const advice = "Hehehe placeholder for AI advice";
+    const advice = await getAdvice(journal_entry, sentimentScore, session_time);
 
     // Insert or update user's journal entry
     const result = await collection.findOne({ _id: userId });
