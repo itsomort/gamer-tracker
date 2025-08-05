@@ -2,15 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import * as CryptoJS from 'crypto-js';
-
-function generateSalt(length: number = 5): string {
-  return CryptoJS.lib.WordArray.random(length).toString();
-}
-
-function hashSHA256(data: string, salt: string): string {
-  return CryptoJS.SHA256(salt + data).toString();
-}
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -26,9 +18,6 @@ export class Journal implements OnInit {
   sentiment: number | null = null;
   username: string = '';
   password: string = '';
-  salt: string = generateSalt();
-  hashedUser: string = '';
-  hashedPassword: string = '';
   gamesPlayed: number = 0;
   public sessionTime: number = 0; // in seconds
   public sessionTimerRunning: boolean = false;
@@ -41,19 +30,14 @@ export class Journal implements OnInit {
       this.password = localStorage.getItem('password') || '';
       this.subject = localStorage.getItem('subject') || '';
       this.journalEntry = localStorage.getItem('journalEntry') || '';
-      // Hash values once after loading
-      this.hashedUser = hashSHA256(this.username, this.salt);
-      this.hashedPassword = hashSHA256(this.password, this.salt);
-      console.log('Hashed username:', this.hashedUser); // to be removed
-      console.log('Hashed password:', this.hashedPassword);
     }
   }
 
-  constructor(private router: Router, public http: HttpClient) {}
+    constructor(private router: Router, private http: HttpClient, private authService: AuthService) {}
 
   onHomeNavigate(event: Event) {
     event.preventDefault();
-    this.router.navigate(['/']);
+    this.router.navigate(['/prev-entries']);
   }
 
 
@@ -95,25 +79,39 @@ export class Journal implements OnInit {
 
   onSubmit(event: Event, doSentiment: boolean) {
     event.preventDefault();
-    // Use precomputed hashes
-    console.log('Submitting journal entry:', { userid: this.hashedUser, password: this.hashedPassword, journal_entry: this.journalEntry });
+    
+    // Get current user from AuthService
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser || !currentUser.username) {
+      alert('Authentication required. Please log in again.');
+      this.router.navigate(['/signup']);
+      return;
+    }
+    
+    // Get JWT headers for authentication middleware
+    const authHeaders = this.authService.getAuthHeaders();
+    const headers = { 
+      'Content-Type': 'application/json',
+      ...authHeaders
+    };
+    
+    // Send request with new API format (subject, journal_entry, session_time)
     this.http.post<any>(
       '/api/journal',
       {
-        userid: this.hashedUser,
-        //password: this.hashedPassword,
+        subject: this.subject,
         journal_entry: this.journalEntry,
-        //games: this.gamesPlayed
-        //time: this.sessionTime
+        session_time: this.sessionTimeDisplay
       },
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
+      { headers }
     ).subscribe({
       next: response => {
         if (doSentiment) this.sentiment = response.sentiment;
         else this.sentiment = this.sentiment;
-        // Optionally, show a message or update the UI
+        // Show AI advice if available
+        if (response.advice) {
+          console.log('AI Advice:', response.advice);
+        }
         console.log('Journal entry submitted successfully:', response);
       },
       error: err => {

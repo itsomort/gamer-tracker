@@ -68,7 +68,7 @@ router.post('/register', async(req, res) => {
     }
 
     // return jwt token to session
-    res.status(200).json({"message": "Success", "token": token});
+    res.status(200).json({"message": "success", "token": token});
 });
 
 /**

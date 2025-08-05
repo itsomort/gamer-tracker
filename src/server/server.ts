@@ -41,7 +41,6 @@ const jwtAuth = jwt({ secret: jwt_secret, algorithms: ["HS256"], userProperty: "
 
 app.use(passport.initialize());
 app.use('/api/user', auth);
-// protected routes
 app.use('/api/admin', jwtAuth, admin);
 app.use('/api/journal', jwtAuth, journal);
 app.use('/api/profile', jwtAuth, profile);

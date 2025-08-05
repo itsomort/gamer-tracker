@@ -1,42 +1,91 @@
- <head>
-   <link rel="stylesheet" href="./admin-panel.css">
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
- </head>
+<head>
+  <link rel="stylesheet" href="./admin-panel.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+</head>
 
+<body>
+  <div id="header">
+    <h1>Admin Panel</h1>
+    <div>
+      <button (click)="onHomeNavigate()" type="button">Home</button>
+      <button (click)="onLogout()" type="button">Logout</button>
+    </div>
+  </div>
 
- <body>
-    <form id="main_panel">
-      <div id="users">
-        <div id="user">
-          <input name="user_form" type="radio" value="Joe_Shmoe">
-          <label for="Joe_Shmoe">Joe Shmoe</label> <br>
-        </div>
-        <div id="user">
-          <input name="user_form" type="radio" value="Jane_Shmoe">
-          <label for="Jane_Shmoe">Jane Shmoe</label> <br>
-        </div>
+  <form id="main_panel">
+    <div id="users">
+      <h2>Users</h2>
+      <div *ngFor="let user of users" id="user">
+        <input 
+          name="user_form" 
+          type="radio" 
+          [value]="user.username"
+          (change)="onUserSelect(user)"
+          [id]="'user_' + user.username">
+        <label [for]="'user_' + user.username">{{ user.username }} ({{ user.type === 1 ? 'Admin' : 'User' }})</label>
       </div>
-
-      <div id="journals">
-        <!-- populate with the chosen users journals-->
-
-        <div id="journal">
-          <input name="journal_form" type="radio" value="Journal_1">
-          <label for="Journal_1"> Joe Shmoe 1st journal</label> <br>
-        </div>
-        <div id="journal">
-          <input name="journal_form" type="radio" value="Journal_2">
-          <label for="Journal_2"> Joe Shmoe 2nd journal</label> <br>
-        </div>
-
+      <div *ngIf="users.length === 0" id="user">
+        <span>No users found</span>
       </div>
+    </div>
 
-      <button id="admin-button">get Journals</button>
-      <button id="admin-button">delete user</button>
-      <button id="admin-button">delete journal</button>
+    <div id="journals">
+      <h2>Journals</h2>
+      <div *ngIf="!selectedUser" id="journal">
+        <span>Select a user to view their journals</span>
+      </div>
+      <div *ngFor="let journal of journals" id="journal">
+        <input 
+          name="journal_form" 
+          type="radio" 
+          [value]="journal.id"
+          (change)="onJournalSelect(journal)"
+          [id]="'journal_' + journal.id">
+        <label [for]="'journal_' + journal.id">
+          {{ journal.subject }} - {{ journal.date | date:'short' }}
+        </label>
+      </div>
+      <div *ngIf="selectedUser && journals.length === 0" id="journal">
+        <span>No journals found for {{ selectedUser.username }}</span>
+      </div>
+    </div>
 
-    </form>
- </body>
+    <div id="actions">
+      <button 
+        type="button"
+        (click)="loadUserJournals(selectedUser?.username)" 
+        [disabled]="!selectedUser"
+        id="admin-button">
+        Get Journals
+      </button>
+      <button 
+        type="button"
+        (click)="deleteUser()" 
+        [disabled]="!selectedUser"
+        id="admin-button">
+        Delete User
+      </button>
+      <button 
+        type="button"
+        (click)="deleteJournal()" 
+        [disabled]="!selectedJournal"
+        id="admin-button">
+        Delete Journal
+      </button>
+    </div>
+
+    <div *ngIf="selectedJournal" id="journal_preview">
+      <h3>Journal Preview</h3>
+      <div>
+        <p><strong>Subject:</strong> {{ selectedJournal.subject }}</p>
+        <p><strong>Entry:</strong> {{ selectedJournal.content }}</p>
+        <p><strong>Games Played:</strong> {{ selectedJournal.games }}</p>
+        <p><strong>Session Time:</strong> {{ selectedJournal.time }} seconds</p>
+        <p><strong>Date:</strong> {{ selectedJournal.date | date:'full' }}</p>
+      </div>
+    </div>
+  </form>
+</body>
 
