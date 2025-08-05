@@ -15,7 +15,7 @@ Your job is to give players short, supportive advice based on their current gami
 You will receive the player's journal entry, a sentiment analysis score, \
 and the total session time in hours and minutes. Based on this information, \
 respond with a brief, single-sentence recommendation: either continue playing, \
-take a short break, or end the session for the night. Be thoughtful, motivational, and concise.\
+take a short break, or end the session. Be thoughtful, motivational, and concise.\
 Input:\n
 Session time: ${session_time}\n
 Sentiment score: ${sentimentScore}\n
@@ -63,8 +63,10 @@ router.post('/', async (req: any, res: any) => {
 
     // Analyze sentiment score
     const sentimentScore = sentiment.analyze(journal_entry).score;
-    const advice = await getAdvice(journal_entry, sentimentScore, session_time);
-
+    let advice = "no ai mode detected";
+    if(process.env.RUN_AI === "1" || process.env.RUN_AI === undefined) {
+      advice = await getAdvice(journal_entry, sentimentScore, session_time) || "something went wrong";
+    }
     // Insert or update user's journal entry
     const result = await collection.findOne({ _id: userId });
     if (!result) {
