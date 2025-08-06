@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 
 
 @Component({
   selector: 'app-journal',
   standalone: true,
-  imports: [FormsModule, HttpClientModule],
+  imports: [FormsModule, HttpClientModule, CommonModule],
   templateUrl: './journal.html',
   styleUrls: ['./journal.css']
 })
@@ -16,6 +17,7 @@ export class Journal implements OnInit {
   subject: string = '';
   journalEntry: string = '';
   sentiment: number | null = null;
+  advice: string = '';
   username: string = '';
   password: string = '';
   gamesPlayed: number = 0;
@@ -118,6 +120,7 @@ export class Journal implements OnInit {
         else this.sentiment = this.sentiment;
         // Show AI advice if available
         if (response.advice) {
+          this.advice = response.advice;
           console.log('AI Advice:', response.advice);
         }
         console.log('Journal entry submitted successfully:', response);

@@ -88,14 +88,16 @@ export class AdminPanel implements OnInit {
           console.log('Raw journal entries from backend:', response.entries);
           this.journals = response.entries.map((journal: any, index: number) => {
             console.log('Processing journal entry:', journal);
-            // Journal entries are stored as arrays: [subject, journal_entry, session_time, sentimentScore]
+            // Journal entries are stored as arrays: [subject, journal_entry, session_time, sentimentScore, advice]
             if (Array.isArray(journal)) {
               return {
                 id: `${username}_${index}`, // Create unique ID
                 subject: journal[0] || 'No Subject',
                 content: journal[1] || 'No Content',
                 games: 0, // Not stored in the array format
-                time: journal[2] || 0
+                time: journal[2] || 0,
+                sentiment: journal[3] || 0,
+                advice: journal[4] || 'No advice available'
               };
             } else {
               // Fallback for object format
@@ -104,7 +106,9 @@ export class AdminPanel implements OnInit {
                 subject: journal.subject || journal.journal_subject || journal.title || 'No Subject',
                 content: journal.journal_entry || journal.content || journal.entry || 'No Content',
                 games: journal.games || 0,
-                time: journal.time || journal.session_time || 0
+                time: journal.time || journal.session_time || 0,
+                sentiment: journal.sentiment || 0,
+                advice: journal.advice || 'No advice available'
               };
             }
           });
