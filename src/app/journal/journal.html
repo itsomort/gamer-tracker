@@ -10,10 +10,10 @@
  <body>
   <div class="journal-bg"></div>
    <div id="header">
-    <button id="profile">
-      AU
+    <button id="logout" (click)="onLogout($event)">
+      Logout
     </button>
-    <button id="home" (click)="onHomeNavigate($event)">
+    <button id="home" (click)="onPrevNavigate($event)">
       Past Thoughts
     </button>
    </div>

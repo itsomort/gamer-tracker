@@ -45,9 +45,14 @@ export class Journal implements OnInit {
 
     constructor(private router: Router, private http: HttpClient, private authService: AuthService) {}
 
-  onHomeNavigate(event: Event) {
+  onPrevNavigate(event: Event) {
     event.preventDefault();
     this.router.navigate(['/prev-entries']);
+  }
+
+  onLogout(event: Event) {
+    event.preventDefault();
+    this.authService.logout();
   }
 
 
