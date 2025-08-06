@@ -40,12 +40,14 @@ body, html {
 
 #journal {
   width: 80%;
-  min-height: 60vh;
+  height: 70vh;
   background-color: #F0DBDB;
   border-radius: 40px;
   margin: 0 auto;
   position: relative;
   padding-bottom: 100px; /* space for buttons */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Animated shapes background */
@@ -179,7 +181,7 @@ body, html {
 body{
   font-family:"JetBrains Mono", Arial, Helvetica, sans-serif;
   font-optical-sizing: auto;
-  font-weight: <weight>;
+  font-weight: normal;
   overflow: scroll;
   overflow-x:hidden;
   background-color: #FEFCF3;
@@ -355,9 +357,13 @@ body{
 }
 
 textarea {
-  resize: none;
-  wrap:soft;
-
+  resize: vertical;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 200px;
+  max-height: 50vh;
 }
 
 #form{
@@ -370,14 +376,18 @@ textarea {
   margin-bottom:0;
   margin-top:5%;
   width:80%;
-  height:100%;
-  overflow:visible;
+  height: 50vh;
+  max-height: 50vh;
+  overflow-y: auto;
   align-items: center;
   background-color:inherit;
+  resize: vertical;
+  overflow-x: hidden;
 }
 
 form {
-  height:100%;
+  height: auto;
+  max-height: 65vh;
 }
 
 #Sentiment{
@@ -440,4 +450,43 @@ form {
   text-align: center;
    align-items: center;
    justify-content: center;
+}
+
+/* Advice Box Styling */
+.advice-container {
+  width: 65%;
+  position: relative;
+  left: 10%;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.advice-box {
+  background-color: #F0DBDB;
+  border-radius: 20px;
+  padding: 20px;
+  min-height: 150px;
+  width: 100%;
+  border: 2px solid #DBA39A;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.20);
+}
+
+.advice-header {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #8B4A42;
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 2px solid #DBA39A;
+  padding-bottom: 10px;
+}
+
+.advice-content {
+  font-size: 1em;
+  line-height: 1.6;
+  color: #5A3A3A;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }

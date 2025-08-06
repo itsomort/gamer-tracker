@@ -113,6 +113,7 @@ router.get('/', async (req: any, res: any) => {
 
     if (!result || !result.entries) {
       return res.status(404).send({ status: 1, entries: [] });
+
     }
 
     return res.status(200).send({ status: 0, entries: result.entries });

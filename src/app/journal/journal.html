@@ -14,7 +14,7 @@
       AU
     </button>
     <button id="home" (click)="onHomeNavigate($event)">
-      Past thoughts
+      Past Thoughts
     </button>
    </div>
    <div class="journal-layout">
@@ -52,8 +52,14 @@
            <input type="button" id="no_Sentiment" value="Save" (click)="onSubmit($event, false)">
            <input type="button" id="Sentiment" value="Ask Chat" (click)="onSubmit($event, true)">
            <input type="text" id="form_subject" name="subject" [(ngModel)]="subject" placeholder="Subject"><br>
-           <textarea wrap="soft" rows="100" id="form" name="main" [(ngModel)]="journalEntry" placeholder="How was your game?"></textarea><br>
+           <textarea wrap="soft" rows="15" id="form" name="main" [(ngModel)]="journalEntry" placeholder="How was your game?"></textarea><br>
          </form>
+       </div>
+       <div class="advice-container" *ngIf="advice">
+         <div class="advice-box">
+           <div class="advice-header">AI Advice</div>
+           <div class="advice-content">{{ advice }}</div>
+         </div>
        </div>
      </div>
   </div>
