@@ -13,7 +13,8 @@ router.use(json());
 router.get('/journal', async (req: any, res: any) => {
   const payload = req.auth;
   const targetUsername = req.query.username as string;
-  if (!payload || !payload.username || !targetUsername) {
+  
+  if (!payload || !payload.username) {
     return res.status(400).json({status: 1, entries: []});
   }
 
@@ -27,12 +28,21 @@ router.get('/journal', async (req: any, res: any) => {
       return res.status(403).json({status: 1, entries: []});
     }
 
+    // If no username provided, return list of all users
+    if (!targetUsername) {
+      const users = await userCol.find({}).toArray();
+      return res.status(200).json({status: 0, users: users});
+    }
+
     // Retrieve the journal entries for the requested user
     const userData = await journalCol.findOne({ _id: targetUsername });
 
     if (!userData || !userData.entries) {
       return res.status(404).json({status: 1, entries: []});
     }
+
+    console.log('Admin backend - raw userData:', userData);
+    console.log('Admin backend - entries:', userData.entries);
 
     return res.status(200).json({status: 0, entries: userData.entries});
   } catch (err) {

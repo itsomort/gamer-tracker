@@ -179,7 +179,7 @@ body, html {
 body{
   font-family:"JetBrains Mono", Arial, Helvetica, sans-serif;
   font-optical-sizing: auto;
-  font-weight: <weight>;
+  font-weight: normal;
   overflow: scroll;
   overflow-x:hidden;
   background-color: #FEFCF3;
@@ -356,8 +356,8 @@ body{
 
 textarea {
   resize: none;
-  wrap:soft;
-
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 #form{

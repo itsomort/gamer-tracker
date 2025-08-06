@@ -24,11 +24,19 @@ export class Journal implements OnInit {
   private sessionTimerInterval: any = null;
 
   ngOnInit() {
+    // Check if user is admin and redirect to admin panel
+    this.authService.isAuthenticated().subscribe(isAuth => {
+      if (isAuth && this.authService.isAdmin()) {
+        console.log('Admin user detected, redirecting to admin panel');
+        this.router.navigate(['/admin']);
+        return;
+      }
+    });
+
     if (typeof window !== 'undefined') {
       this.subject = localStorage.getItem('subject') || '';
       this.username = localStorage.getItem('username') || '';
       this.password = localStorage.getItem('password') || '';
-      this.subject = localStorage.getItem('subject') || '';
       this.journalEntry = localStorage.getItem('journalEntry') || '';
     }
   }

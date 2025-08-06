@@ -36,28 +36,22 @@
      <table *ngIf="!loading && !error">
        <tr *ngFor="let entry of entries; let i = index">
          <td>
-           <div id="generated_journal">
+           <div id="generated_journal" 
+                (mouseenter)="onEntryHover(entry)" 
+                (mouseleave)="onEntryLeave()">
              <div id="header">
-               Entry #{{ i + 1 }} - {{ getSentimentText(entry.sentiment) }} ({{ entry.sentiment }})
+               Entry #{{ i + 1 }}
              </div>
              <div id="body">
                {{ entry.entry }}
              </div>
            </div>
            <div class="journal-sidebar" id="journal_side">
-             <div class="gamer_stats">
-               <div id="title">Games Played</div>
-               <div id="data">{{ entry.gamesPlayed || 'N/A' }}</div>
-             </div>
-             <div class="sentiment_analysis">
+             <div class="sentiment_analysis" *ngIf="hoveredEntry && hoveredEntry.sentiment !== undefined && hoveredEntry.sentiment !== null">
                <div id="title">Sentiment Analysis</div>
                <div id="data">
-                 {{ getSentimentText(entry.sentiment) }} ({{ entry.sentiment }})
+                 {{ hoveredEntry.sentiment }}
                </div>
-             </div>
-             <div class="gamer_time">
-               <div id="title">Session Time</div>
-               <div id="data">{{ entry.sessionTime || 'N/A' }}</div>
              </div>
            </div>
          </td>

@@ -40,7 +40,7 @@ export class AdminPanel implements OnInit {
   }
 
   loadUsers() {
-    // Load all users from the system
+    // Load all users using the journal endpoint without username parameter
     console.log('Loading users...');
     
     const authHeaders = this.authService.getAuthHeaders();
@@ -49,9 +49,9 @@ export class AdminPanel implements OnInit {
       ...authHeaders
     };
     
-    this.http.get<any>('/api/admin/users', { headers }).subscribe({
+    this.http.get<any>('/api/admin/journal', { headers }).subscribe({
       next: response => {
-        if (response.status === 0) {
+        if (response.status === 0 && response.users) {
           this.users = response.users;
           console.log('Loaded users:', this.users);
         } else {
@@ -82,19 +82,33 @@ export class AdminPanel implements OnInit {
       ...authHeaders
     };
     
-    this.http.get<any>(`/api/admin/journals/${username}`, { headers }).subscribe({
+    this.http.get<any>(`/api/admin/journal?username=${username}`, { headers }).subscribe({
       next: response => {
         if (response.status === 0) {
-          this.journals = response.journals.map((journal: any) => ({
-            ...journal,
-            id: journal._id,
-            subject: journal.subject || 'No Subject',
-            content: journal.journal_entry,
-            games: journal.games || 0,
-            time: journal.time || 0,
-            date: new Date(journal.date)
-          }));
-          console.log('Loaded journals:', this.journals);
+          console.log('Raw journal entries from backend:', response.entries);
+          this.journals = response.entries.map((journal: any, index: number) => {
+            console.log('Processing journal entry:', journal);
+            // Journal entries are stored as arrays: [subject, journal_entry, session_time, sentimentScore]
+            if (Array.isArray(journal)) {
+              return {
+                id: `${username}_${index}`, // Create unique ID
+                subject: journal[0] || 'No Subject',
+                content: journal[1] || 'No Content',
+                games: 0, // Not stored in the array format
+                time: journal[2] || 0
+              };
+            } else {
+              // Fallback for object format
+              return {
+                id: journal._id || `${username}_${index}`,
+                subject: journal.subject || journal.journal_subject || journal.title || 'No Subject',
+                content: journal.journal_entry || journal.content || journal.entry || 'No Content',
+                games: journal.games || 0,
+                time: journal.time || journal.session_time || 0
+              };
+            }
+          });
+          console.log('Mapped journals:', this.journals);
         } else {
           console.error('Failed to load journals:', response.message);
           this.journals = [];
@@ -111,6 +125,10 @@ export class AdminPanel implements OnInit {
     this.selectedJournal = journal;
   }
 
+  trackByJournalId(index: number, journal: any): any {
+    return journal.id;
+  }
+
   deleteUser() {
     if (!this.selectedUser) return;
     
@@ -123,7 +141,7 @@ export class AdminPanel implements OnInit {
         ...authHeaders
       };
       
-      this.http.delete<any>(`/api/admin/user/${this.selectedUser.username}`, { headers }).subscribe({
+      this.http.post<any>('/api/admin/delete-user', { username: this.selectedUser.username }, { headers }).subscribe({
         next: response => {
           if (response.status === 0) {
             console.log('User deleted successfully');
@@ -158,7 +176,7 @@ export class AdminPanel implements OnInit {
         ...authHeaders
       };
       
-      this.http.delete<any>(`/api/admin/journal/${this.selectedJournal.id}`, { headers }).subscribe({
+      this.http.post<any>('/api/admin/delete-journal', { username: this.selectedUser.username }, { headers }).subscribe({
         next: response => {
           if (response.status === 0) {
             console.log('Journal deleted successfully');

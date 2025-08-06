@@ -1,13 +1,24 @@
-body{
-  font-family:"JetBrains Mono", Arial, Helvetica, sans-serif;
-  font-optical-sizing: auto;
-  overflow: scroll;
-  overflow-x:hidden;
-  background-color: #FEFCF3;
-  margin: 0;
-  padding: 20px;
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
 }
 
+/* Angular component wrapper - allow natural scrolling */
+:host {
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: "JetBrains Mono", Arial, Helvetica, sans-serif;
+  font-optical-sizing: auto;
+  background-color: #FEFCF3;
+  padding: 20px;
+  padding-bottom: 300px;
+  min-height: 150vh;
+  overflow: visible;
+}
+
+/* Header section */
 #header {
   display: flex;
   justify-content: space-between;
@@ -44,25 +55,29 @@ body{
   background-color: #EBB3AA;
 }
 
-#main_panel{
-  background-color:#DBA39A;
+/* Main panel grid layout */
+#main_panel {
+  background-color: #DBA39A;
   border-radius: 25px;
   text-align: center;
   padding: 15px;
-  height: auto;
-  min-height: 500px;
   filter: drop-shadow(8px 8px 10px gray);
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
   gap: 15px;
+  margin-bottom: 20px;
+  width: 100%;
 }
 
-#users, #journals{
+/* Users and journals sections with fixed height scrolling */
+#users, #journals {
   background-color: #FEFCF3;
   border-radius: 25px;
   padding: 15px;
-  height: 300px;
-  overflow-y: scroll;
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #users h2, #journals h2 {
@@ -75,7 +90,8 @@ body{
   padding-bottom: 10px;
 }
 
-#user, #journal{
+/* Individual user and journal items */
+#user, .journal-item-container, .journal-placeholder {
   background-color: #FEFCF3;
   border: 1px solid #DBA39A;
   border-radius: 8px;
@@ -87,10 +103,19 @@ body{
   cursor: pointer;
 }
 
-#user:hover, #journal:hover{
+#user:hover, .journal-item-container:hover {
   background-color: #DEDCD3;
 }
 
+.journal-placeholder {
+  cursor: default;
+}
+
+.journal-placeholder:hover {
+  background-color: #FEFCF3;
+}
+
+/* Action buttons section */
 #actions {
   grid-column: 1 / -1;
   display: flex;
@@ -99,7 +124,7 @@ body{
   margin: 15px 0;
 }
 
-#admin-button{
+#admin-button {
   font-size: 1.1em;
   width: 120px;
   height: 50px;
@@ -112,7 +137,7 @@ body{
   font-weight: 500;
 }
 
-#admin-button:hover:not(:disabled){
+#admin-button:hover:not(:disabled) {
   background-color: #EBB3AA;
 }
 
@@ -122,12 +147,14 @@ body{
   cursor: not-allowed;
 }
 
+/* Journal preview section */
 #journal_preview {
   grid-column: 1 / -1;
   background-color: #FEFCF3;
   border-radius: 15px;
   padding: 20px;
   margin-top: 15px;
+  margin-bottom: 80px;
 }
 
 #journal_preview h3 {
@@ -157,7 +184,8 @@ body{
   color: #8B5A4A;
 }
 
-input{
+/* Radio button and label styling */
+input {
   opacity: 0;
   position: absolute;
   width: 100%;
@@ -165,7 +193,7 @@ input{
   cursor: pointer;
 }
 
-label{
+label {
   margin: auto;
   display: block;
   width: 100%;
@@ -173,13 +201,49 @@ label{
   padding: 0;
 }
 
-input:checked + label{
+input:checked + label {
   background-color: #DBA39A;
   color: white;
   border-radius: 8px;
   padding: 4px 8px;
 }
 
+/* Journal item styling */
+.journal-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.journal-subject {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  line-height: 1.2;
+}
+
+input:checked + label .journal-subject {
+  color: white;
+}
+
+/* Preview subject styling */
+.preview-subject {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #8B5A4A;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #F5E6D3;
+  border-radius: 12px;
+  border-left: 5px solid #DBA39A;
+  text-align: center;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
   #main_panel {
     grid-template-columns: 1fr;

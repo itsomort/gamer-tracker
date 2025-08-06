@@ -1,13 +1,13 @@
 import { Router, json } from 'express';
 import connectToDb from '../db/mongo';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 import { configDotenv } from 'dotenv';
 // TODO: replace with local AI 
 // whatever has the smallest weights
 const Sentiment = require('sentiment');
 const sentiment = new Sentiment();
 configDotenv();
-const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
 
 async function getAdvice(journal_entry: string, sentimentScore: any, session_time: any) {
   let prompt = `You are an interactive gaming journaling assistant.\
@@ -20,10 +20,12 @@ Input:\n
 Session time: ${session_time}\n
 Sentiment score: ${sentimentScore}\n
 Journal entry: ${journal_entry}`
-  
-  const model = ai.getGenerativeModel({ model: "gemini-pro" });
-  const response = await model.generateContent(prompt);
-  return response.response.text();
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash-lite",
+    contents: prompt
+  });
+
+  return response.text;
 }
 
 const router = Router();
@@ -111,6 +113,7 @@ router.get('/', async (req: any, res: any) => {
 
     if (!result || !result.entries) {
       return res.status(404).send({ status: 1, entries: [] });
+
     }
 
     return res.status(200).send({ status: 0, entries: result.entries });
